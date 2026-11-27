@@ -33,6 +33,39 @@
    "colorName": "رمادي جرافيت",
    "hex": "#3b4047",
    "size": 5909854
+  },
+  {
+   "code": "FZPDQ",
+   "car": "superb",
+   "brand": "SKODA",
+   "model": "SUPERB",
+   "year": "2020",
+   "color": "silver",
+   "colorName": "فضي",
+   "hex": "#a9aeb5",
+   "size": 6694091
+  },
+  {
+   "code": "2W5NP",
+   "car": "superb",
+   "brand": "SKODA",
+   "model": "SUPERB",
+   "year": "2020",
+   "color": "red",
+   "colorName": "أحمر",
+   "hex": "#6e0e13",
+   "size": 6493744
+  },
+  {
+   "code": "79M4Y",
+   "car": "superb",
+   "brand": "SKODA",
+   "model": "SUPERB",
+   "year": "2020",
+   "color": "blue",
+   "colorName": "أزرق",
+   "hex": "#15284a",
+   "size": 6154209
   }
  ]
 }

@@ -7,7 +7,7 @@
 
 | السيارة | أبيض | أسود | رمادي جرافيت | فضي | أحمر | أزرق |
 |---|---|---|---|---|---|---|
-| Skoda Superb 2020 | `Y96YN` | `ZQJC6` | `YLBLW` | … | … | … |
+| Skoda Superb 2020 | `Y96YN` | `ZQJC6` | `YLBLW` | `FZPDQ` | `2W5NP` | `79M4Y` |
 <!-- /codes -->
 
 Public files for the **Drive** car launcher. The app only reads from here, it never writes and holds no token.
