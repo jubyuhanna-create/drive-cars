@@ -14,7 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { api: 24, ram: 2048, arch: x86_64 }   # Android 7, old units
           - { api: 27, ram: 1024, arch: x86 }      # Android 8.1, weak 1 GB unit
           - { api: 29, ram: 2048, arch: x86_64 }   # Android 10, most cheap units
           - { api: 33, ram: 4096, arch: x86_64 }   # Android 13, newer units

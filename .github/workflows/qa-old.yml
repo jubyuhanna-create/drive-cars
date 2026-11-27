@@ -1,0 +1,41 @@
+name: qa-old
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['app.json', 'tools/qa_quick.sh', '.github/workflows/qa-old.yml']
+permissions:
+  contents: write
+jobs:
+  api24:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 24
+          target: google_apis
+          arch: x86_64
+          ram-size: 2048M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -skin 1024x600
+          disable-animations: false
+          script: bash tools/qa_quick.sh 24
+      - name: Save results
+        if: always()
+        run: |
+          pip install -q pillow
+          python3 -c "
+          import glob,os
+          from PIL import Image
+          for f in glob.glob('qa-out/*.png'):
+              Image.open(f).convert('RGB').resize((1024,600)).save(f[:-4]+'.jpg',quality=78); os.remove(f)
+          "
+          cd qa-out && git init -q -b qa && git add -A
+          git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "QA API 24 quick"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" qa:qa-api24-quick
