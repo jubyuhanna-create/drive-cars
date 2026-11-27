@@ -1,0 +1,77 @@
+Drive 3.0.20  API 24  RAM 2002 MB
+display: Physical size: 1024x600  Physical density: 160 
+install: Success
+apk size: 1393912 bytes
+
+== 1. first run: code box
+  top: ee35b49 u0 com.el7ajb.carlauncher/.PanelActivity t4
+  [shot] 01_first_run (1024 x 600)
+  [shot] 02_code_typed (1024 x 600)
+  car folder: superb-y96yn   after 0s
+  frames on disk: 216
+  [shot] 03_after_download (1024 x 600)
+  tap 'Start' at 921 546
+  [shot] 04_onboarding_settings (1024 x 600)
+  top: 8125187 u0 com.el7ajb.carlauncher/.MainActivity t4
+  [shot] 05_home_1024x600 (1024 x 600)
+
+== 2. speed and memory (1024x600 mdpi)
+  cold start: TotalTime: 2137 WaitTime: 981 
+  home idle memory: 25452 KB
+  home idle cpu (10s): 0%
+  home idle frames (5s): Total frames rendered: 0;Janky frames: 0 (-nan%);90th percentile: 4950ms;99th percentile: 4950ms;
+  settings panel open: TotalTime: 513 
+  [shot] 06_settings (1024 x 600)
+  [shot] 07_settings_bottom (1024 x 600)
+  ui: text="Open Drive when the screen turns on"
+  ui: text="Drive update"
+  ui: text="You have the latest version"
+  ui: text="Up to date"
+  ui: text="Version 3.0.20"
+  apps panel open: TotalTime: 81 
+  [shot] 08_apps (1024 x 600)
+  [shot] 09_picker (1024 x 600)
+  tap 'Car code' at 829 75
+  tap 'Pick from the list' at 581 109
+  [shot] 10_pick_list (1024 x 600)
+  [shot] 11_home_page2 (1024 x 600)
+
+== 3. showroom
+  [shot] 12_showroom_open (1024 x 600)
+  slow drags: Total frames rendered: 239;Janky frames: 174 (72.80%);90th percentile: 24ms;99th percentile: 34ms;
+  fling: Total frames rendered: 54;Janky frames: 21 (38.89%);90th percentile: 20ms;99th percentile: 27ms;
+  [shot] 13_showroom_after_fling (1024 x 600)
+  [shot] 14_showroom_high (1024 x 600)
+  [shot] 15_showroom_low (1024 x 600)
+  showroom memory after turning: 60366 KB
+  [shot] 16_after_double_tap (1024 x 600)
+  [shot] 17_after_back_key (1024 x 600)
+  home memory after showroom: 63287 KB
+  geo fix answer: OK 
+  last location:  gps: Location[gps 32.700000,35.305998 acc=20 et=+3m13s25ms vel=20.0 bear=0.0 {Bundle[{satellites=0}]}]
+ gps: Location[gps 39.237255,-123.150032 acc=20 et=+58s923ms alt=0.0 vel=0.0 bear=0.0 {Bundle[{}]}]
+  [shot] 18_after_driving_20kn (1024 x 600)
+
+== 4. screen sizes
+  [shot] 19_home_1024x600_240 (1024 x 600)
+  [shot] 20_showroom_1024x600_240 (1024 x 600)
+  [shot] 21_home_1280x720_160 (1280 x 720)
+  [shot] 22_showroom_1280x720_160 (1280 x 720)
+  [shot] 23_home_1280x720_240 (1280 x 720)
+  [shot] 24_showroom_1280x720_240 (1280 x 720)
+  [shot] 25_home_800x480_120 (800 x 480)
+  [shot] 26_showroom_800x480_120 (800 x 480)
+  [shot] 27_home_1920x720_240 (1920 x 720)
+  [shot] 28_showroom_1920x720_240 (1920 x 720)
+  [shot] 29_home_1280x800_160 (1280 x 800)
+  [shot] 30_showroom_1280x800_160 (1280 x 800)
+  [shot] 31_home_2000x1200_320 (2000 x 1200)
+  [shot] 32_showroom_2000x1200_320 (2000 x 1200)
+  [shot] 33_home_768x1024_160 (768 x 1024)
+  [shot] 34_showroom_768x1024_160 (768 x 1024)
+
+== 5. it must always come back
+  stock launcher: com.android.launcher3/.Launcher
+  after opening the stock launcher, top: 50da3a1 u0 com.el7ajb.carlauncher/.MainActivity t8
+  [shot] 35_after_stock_launcher (1024 x 600)
+  settings app then HOME, top: a23c98 u0 com.el7ajb.carlauncher/.MainActivity t5
