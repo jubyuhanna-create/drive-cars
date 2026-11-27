@@ -1,0 +1,56 @@
+name: qa
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['app.json', 'tools/qa.sh', '.github/workflows/qa.yml']
+permissions:
+  contents: write
+jobs:
+  emulator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { api: 24, ram: 2048 }   # Android 7, old units
+          - { api: 27, ram: 1024 }   # Android 8.1, weak 1 GB unit
+          - { api: 29, ram: 2048 }   # Android 10, most cheap units
+          - { api: 33, ram: 4096 }   # Android 13, newer units
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Run QA
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis
+          arch: x86_64
+          ram-size: ${{ matrix.ram }}M
+          disk-size: 4096M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none
+          disable-animations: false
+          script: bash tools/qa.sh ${{ matrix.api }}
+      - name: Save results to the qa-api${{ matrix.api }} branch
+        if: always()
+        run: |
+          pip install -q pillow
+          python3 - <<'PY'
+          import glob, os
+          from PIL import Image
+          for f in glob.glob('qa-out/*.png'):
+              try:
+                  Image.open(f).convert('RGB').save(f[:-4] + '.jpg', quality=78)
+              except Exception as e:
+                  print(f, e)
+              os.remove(f)
+          PY
+          cd qa-out && rm -f ui.xml
+          git init -q -b qa && git add -A
+          git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "QA API ${{ matrix.api }} run ${{ github.run_number }}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" qa:qa-api${{ matrix.api }}
