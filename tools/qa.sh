@@ -10,7 +10,7 @@ VER=$(python3 -c "import json;print(json.load(open('app.json'))['versionName'])"
 log(){ echo "$*" | tee -a $R; }
 sh(){ adb shell "$@" 2>/dev/null | tr -d '\r'; }
 n=0
-shot(){ n=$((n+1)); f=$(printf "%02d_%s" $n "$1"); adb exec-out screencap -p > $OUT/$f.png; log "  [shot] $f"; }
+shot(){ n=$((n+1)); f=$(printf "%02d_%s" $n "$1"); adb exec-out screencap -p > $OUT/$f.png; size; echo "$f $W $H" >> $OUT/sizes.txt; log "  [shot] $f ($W x $H)"; }
 top(){ sh dumpsys activity activities | grep -m1 -E "mResumedActivity|topResumedActivity" | sed 's/.*{//;s/}.*//' ; }
 ui(){ sh uiautomator dump /sdcard/ui.xml >/dev/null; adb pull /sdcard/ui.xml $OUT/ui.xml >/dev/null 2>&1; }
 tap_text(){ ui; xy=$(python3 tools/qa_tap.py $OUT/ui.xml "$@") && { sh input tap $xy; log "  tap '$1' at $xy"; return 0; }; log "  !! could not find '$1'"; return 1; }
@@ -23,13 +23,14 @@ cpu(){ # % of one core used by the app over $1 seconds
 mem(){ sh dumpsys meminfo $PKG | grep -m1 -E "TOTAL( PSS)?:? " | awk '{print $2" KB"}'; }
 gfx(){ sh dumpsys gfxinfo $PKG | grep -E "Total frames rendered|Janky frames|90th percentile|99th percentile" | sed 's/^ *//' | tr '\n' ';'; }
 crashes(){ sh logcat -d -b crash | grep -c -E "FATAL|$PKG"; }
-car_tap(){ size; sh input tap $((W/2)) $((H*47/100)); }
+car_tap(){ size; local bh=$H by=0; [ $((W*100/H)) -lt 145 ] && { bh=$((W*10/17)); by=$(( (H-bh)/2 )); }; sh input tap $((W/2)) $((by + bh*47/100)); }
 
 log "Drive $VER  API $API  RAM $(sh cat /proc/meminfo | head -1 | awk '{print int($2/1024)" MB"}')"
 adb root >/dev/null; sleep 4; adb wait-for-device
 sh svc power stayon true; sh settings put system screen_off_timeout 1800000
 sh locksettings set-disabled true; sh settings put secure lockscreen.disabled 1
 sh wm size 1024x600; sh wm density 160; sleep 2
+log "display: $(sh wm size | tr '\n' ' ') $(sh wm density | tr '\n' ' ')"
 adb logcat -c; adb logcat -b crash -c
 adb install -r -g $APK > $OUT/install.txt 2>&1; log "install: $(tail -1 $OUT/install.txt)"
 log "apk size: $(stat -c %s $APK) bytes"
@@ -50,7 +51,6 @@ t0=$(date +%s); while [ -z "$(sh ls /data/data/$PKG/files/cars 2>/dev/null | gre
 log "  car folder: $(sh ls /data/data/$PKG/files/cars | tr '\n' ' ')  after $(( $(date +%s) - t0 ))s"
 log "  frames on disk: $(sh ls /data/data/$PKG/files/cars/*/spin | wc -l)"
 sleep 3; shot after_download
-tap_text "Pick from the list" && { sleep 6; shot pick_list; tap_text "I have a code"; sleep 1; }
 tap_text "Start"; sleep 3; shot onboarding_settings
 sh input keyevent KEYCODE_HOME; sleep 7
 log "  top: $(top)"; shot home_1024x600
@@ -67,7 +67,9 @@ st=$(sh am start -W -n $PKG/.PanelActivity --es screen settings | grep -E "Total
 log "  settings panel open: $st"; shot settings
 st=$(sh am start -W -n $PKG/.PanelActivity --es screen apps | grep -E "TotalTime" | tr '\n' ' '); sleep 3
 log "  apps panel open: $st"; shot apps
-sh input keyevent KEYCODE_HOME; sleep 4
+sh am start -n $PKG/.PanelActivity --es screen picker >/dev/null; sleep 3; shot picker
+tap_text "Car code" && sleep 2 && tap_text "Pick from the list" && { sleep 6; shot pick_list; }
+sh input keyevent KEYCODE_BACK; sleep 1; sh input keyevent KEYCODE_HOME; sleep 4
 
 log ""; log "== 3. showroom"
 car_tap; sleep 2.5; shot showroom_open
@@ -114,7 +116,6 @@ done
 log ""; log "== 6. it must always come back"
 sh cmd notification allow_listener $PKG/$PKG.NotifService >/dev/null
 sh settings put secure enabled_accessibility_services $PKG/$PKG.HomeGuard; sh settings put secure accessibility_enabled 1; sleep 3
-sh cmd notification post -S bigtext -t "WhatsApp" qa "Ahmad: where are you?" >/dev/null; sleep 2; shot notification_popup
 OTHER=$(sh cmd package query-activities --brief -a android.intent.action.MAIN -c android.intent.category.HOME | grep "/" | grep -v $PKG | grep -v -i fallback | head -1 | tr -d ' ')
 log "  stock launcher: $OTHER"
 if [ -n "$OTHER" ]; then sh am start -n $OTHER >/dev/null; sleep 4; log "  after opening the stock launcher, top: $(top)"; shot after_stock_launcher; fi

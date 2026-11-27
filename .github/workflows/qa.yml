@@ -14,10 +14,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { api: 24, ram: 2048 }   # Android 7, old units
-          - { api: 27, ram: 1024 }   # Android 8.1, weak 1 GB unit
-          - { api: 29, ram: 2048 }   # Android 10, most cheap units
-          - { api: 33, ram: 4096 }   # Android 13, newer units
+          - { api: 24, ram: 2048, arch: x86_64 }   # Android 7, old units
+          - { api: 27, ram: 1024, arch: x86 }      # Android 8.1, weak 1 GB unit
+          - { api: 29, ram: 2048, arch: x86_64 }   # Android 10, most cheap units
+          - { api: 33, ram: 4096, arch: x86_64 }   # Android 13, newer units
     steps:
       - uses: actions/checkout@v4
       - name: Enable KVM
@@ -30,7 +30,8 @@ jobs:
         with:
           api-level: ${{ matrix.api }}
           target: google_apis
-          arch: x86_64
+          arch: ${{ matrix.arch }}
+          profile: pixel_c
           ram-size: ${{ matrix.ram }}M
           disk-size: 4096M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none
@@ -43,9 +44,19 @@ jobs:
           python3 - <<'PY'
           import glob, os
           from PIL import Image
+          sizes = {}
+          try:
+              for line in open('qa-out/sizes.txt'):
+                  a = line.split()
+                  if len(a) == 3 and a[1].isdigit() and a[2].isdigit(): sizes[a[0]] = (int(a[1]), int(a[2]))
+          except Exception: pass
           for f in glob.glob('qa-out/*.png'):
               try:
-                  Image.open(f).convert('RGB').save(f[:-4] + '.jpg', quality=78)
+                  im = Image.open(f).convert('RGB')
+                  k = f.split('/')[-1][:-4]
+                  print(k, im.size, sizes.get(k))
+                  if k in sizes and im.size != sizes[k]: im = im.resize(sizes[k])
+                  im.save(f[:-4] + '.jpg', quality=78)
               except Exception as e:
                   print(f, e)
               os.remove(f)
