@@ -31,10 +31,9 @@ jobs:
           api-level: ${{ matrix.api }}
           target: google_apis
           arch: ${{ matrix.arch }}
-          profile: pixel_c
           ram-size: ${{ matrix.ram }}M
           disk-size: 4096M
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -skin 1024x600
           disable-animations: false
           script: bash tools/qa.sh ${{ matrix.api }}
       - name: Save results to the qa-api${{ matrix.api }} branch

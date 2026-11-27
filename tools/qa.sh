@@ -63,13 +63,17 @@ sleep 8
 log "  home idle memory: $(mem)"
 log "  home idle cpu (10s): $(cpu 10)"
 sh dumpsys gfxinfo $PKG reset >/dev/null; sleep 5; log "  home idle frames (5s): $(gfx)"
-st=$(sh am start -W -n $PKG/.PanelActivity --es screen settings | grep -E "TotalTime" | tr '\n' ' '); sleep 2
+st=$(sh am start -W -f 0x10008000 -n $PKG/.PanelActivity --es screen settings | grep -E "TotalTime" | tr '\n' ' '); sleep 2
 log "  settings panel open: $st"; shot settings
-st=$(sh am start -W -n $PKG/.PanelActivity --es screen apps | grep -E "TotalTime" | tr '\n' ' '); sleep 3
+for k in 1 2 3; do sh input swipe $((W/2)) $((H*80/100)) $((W/2)) $((H*20/100)) 300; done; sleep 2; shot settings_bottom
+ui; grep -o 'text="[^"]*"' $OUT/ui.xml | grep -iE "date|version|drive" | head -5 | sed 's/^/  ui: /' >> $R
+st=$(sh am start -W -f 0x10008000 -n $PKG/.PanelActivity --es screen apps | grep -E "TotalTime" | tr '\n' ' '); sleep 3
 log "  apps panel open: $st"; shot apps
-sh am start -n $PKG/.PanelActivity --es screen picker >/dev/null; sleep 3; shot picker
+sh am start -f 0x10008000 -n $PKG/.PanelActivity --es screen picker >/dev/null; sleep 3; shot picker
 tap_text "Car code" && sleep 2 && tap_text "Pick from the list" && { sleep 6; shot pick_list; }
 sh input keyevent KEYCODE_BACK; sleep 1; sh input keyevent KEYCODE_HOME; sleep 4
+size; sh input swipe $((W*80/100)) $((H/2)) $((W*20/100)) $((H/2)) 300; sleep 2; shot home_page2
+sh input swipe $((W*20/100)) $((H/2)) $((W*80/100)) $((H/2)) 300; sleep 2
 
 log ""; log "== 3. showroom"
 car_tap; sleep 2.5; shot showroom_open
@@ -88,7 +92,9 @@ shot after_double_tap
 car_tap; sleep 2.5; sh input keyevent KEYCODE_BACK; sleep 2; shot after_back_key
 sleep 3; log "  home memory after showroom: $(mem)"
 car_tap; sleep 2.5
-for k in 1 2 3 4; do adb emu geo fix 35.30 32.70 100 8 20 >/dev/null 2>&1; sleep 1; done
+for k in 1 2 3 4 5 6; do g=$(adb emu geo fix 35.30$k 32.70 100 8 20 2>&1 | tr '\n' ' '); sleep 1; done
+log "  geo fix answer: $g"
+log "  last location: $(sh dumpsys location | grep -m2 -iE 'last.*gps|gps: Location' | tr -s ' ' | cut -c1-160)"
 sleep 2; shot after_driving_20kn
 for k in 1 2; do adb emu geo fix 35.30 32.70 100 8 0 >/dev/null 2>&1; sleep 1; done
 
@@ -101,19 +107,7 @@ for s in 1024x600:240 1280x720:160 1280x720:240 800x480:120 1920x720:240 1280x80
 done
 sh wm size 1024x600; sh wm density 160; sleep 4
 
-log ""; log "== 5. languages"
-P=/data/data/$PKG/shared_prefs/cl.xml
-for L in ar he; do
-  U=$(sh stat -c %u:%g $P)
-  sh "sed -i '/name=\"lang\"/d; s#</map>#<string name=\"lang\">$L</string></map>#' $P; chown $U $P; chmod 660 $P; restorecon $P"
-  sh am force-stop $PKG; sh input keyevent KEYCODE_HOME; sleep 7; shot "home_$L"
-  car_tap; sleep 2.5; shot "showroom_$L"; sh input keyevent KEYCODE_BACK; sleep 1
-  sh am start -n $PKG/.PanelActivity --es screen settings; sleep 3; shot "settings_$L"
-  sh am start -n $PKG/.PanelActivity --es screen picker; sleep 3; shot "picker_$L"
-  sh input keyevent KEYCODE_HOME; sleep 2
-done
-
-log ""; log "== 6. it must always come back"
+log ""; log "== 5. it must always come back"
 sh cmd notification allow_listener $PKG/$PKG.NotifService >/dev/null
 sh settings put secure enabled_accessibility_services $PKG/$PKG.HomeGuard; sh settings put secure accessibility_enabled 1; sleep 3
 OTHER=$(sh cmd package query-activities --brief -a android.intent.action.MAIN -c android.intent.category.HOME | grep "/" | grep -v $PKG | grep -v -i fallback | head -1 | tr -d ' ')
@@ -127,6 +121,15 @@ adb reboot; adb wait-for-device; t0=$(date +%s)
 while [ "$(sh getprop sys.boot_completed)" != "1" ] && [ $(( $(date +%s) - t0 )) -lt 240 ]; do sleep 3; done
 sleep 25; adb root >/dev/null; sleep 4; adb wait-for-device
 log "  after reboot ($(( $(date +%s) - t0 ))s), top: $(top)"; shot after_reboot
+
+log ""; log "== 6. languages (changed in Settings like a user would)"
+for L in "العربية:ar" "עברית:he" "English:en"; do
+  sh am start -f 0x10008000 -n $PKG/.PanelActivity --es screen settings >/dev/null; sleep 3
+  tap_text "${L%%:*}"; sleep 2; shot "settings_${L##*:}"
+  sh am start -f 0x10008000 -n $PKG/.PanelActivity --es screen picker >/dev/null; sleep 3; shot "picker_${L##*:}"
+  sh input keyevent KEYCODE_HOME; sleep 5; shot "home_${L##*:}"
+  [ "${L##*:}" != en ] && { car_tap; sleep 2.5; shot "showroom_${L##*:}"; sh input keyevent KEYCODE_BACK; sleep 1; }
+done
 
 log ""; log "== 7. crashes"
 c=$(sh logcat -d -b crash | grep -A20 "FATAL" | head -60)
