@@ -1,0 +1,103 @@
+Drive 3.0.29  API 27  RAM 1494 MB
+display: Physical size: 1024x600  Physical density: 160 
+install: Success
+apk size: 1404384 bytes
+
+== 1. first run: code box
+  top: 74079de u0 com.el7ajb.carlauncher/.PanelActivity t6
+  [shot] 01_first_run (1024 x 600)
+  [shot] 02_code_typed (1024 x 600)
+  car folder: superb-y96yn   after 0s
+  frames on disk: 216
+  [shot] 03_after_download (1024 x 600)
+  tap 'Start' at 921 546
+  [shot] 04_onboarding_settings (1024 x 600)
+  top: 79c9e00 u0 com.el7ajb.carlauncher/.MainActivity t6
+  [shot] 05_home_1024x600 (1024 x 600)
+
+== 2. speed and memory (1024x600 mdpi)
+  cold start: TotalTime: 2166 WaitTime: 1115 
+  home idle memory: 19717 KB
+  home idle cpu (10s): 0%
+  home idle frames (5s): Total frames rendered: 0;Janky frames: 0 (-nan%);90th percentile: 4950ms;99th percentile: 4950ms;
+  settings panel open: TotalTime: 467 
+  [shot] 06_settings (1024 x 600)
+  [shot] 07_settings_bottom (1024 x 600)
+  ui: text="Open WoWDRIVE when the screen turns on"
+  ui: text="WoWDRIVE update"
+  ui: text="You have the latest version"
+  ui: text="Up to date"
+  ui: text="Version 3.0.29"
+  apps panel open: TotalTime: 68 
+  [shot] 08_apps (1024 x 600)
+  [shot] 09_picker (1024 x 600)
+  tap 'Car code' at 829 75
+  tap 'Pick from the list' at 581 109
+  [shot] 10_pick_list (1024 x 600)
+  [shot] 11_home_page2 (1024 x 600)
+
+== 3. showroom
+  [shot] 12_showroom_open (1024 x 600)
+  slow drags: Total frames rendered: 229;Janky frames: 216 (94.32%);90th percentile: 46ms;99th percentile: 61ms;
+  fling: Total frames rendered: 59;Janky frames: 48 (81.36%);90th percentile: 32ms;99th percentile: 40ms;
+  [shot] 13_showroom_after_fling (1024 x 600)
+  [shot] 14_showroom_high (1024 x 600)
+  [shot] 15_showroom_low (1024 x 600)
+  showroom memory after turning: 83522 KB
+  [shot] 16_after_double_tap (1024 x 600)
+  [shot] 17_after_back_key (1024 x 600)
+  home memory after showroom: 73785 KB
+  geo fix answer: OK 
+  last location:  gps: Location[gps 32.700000,35.305998 hAcc=20 et=+3m35s296ms vel=20.0 bear=0.0 vAcc=??? sAcc=??? bAcc=??? {Bundle[{satellites=0, maxCn0=0, meanCn0=0}]}]
+ gps: Location[gps 39.237255,-123.150032 hAcc=20 et=+41s288ms vel=0.0 bear=0.0 vAcc=??? sAcc=??? bAcc=??? {Bundle[{}]}]
+  [shot] 18_after_driving_20kn (1024 x 600)
+
+== 4. screen sizes
+  [shot] 19_home_1024x600_240 (1024 x 600)
+  [shot] 20_showroom_1024x600_240 (1024 x 600)
+  [shot] 21_home_1280x720_160 (1280 x 720)
+  [shot] 22_showroom_1280x720_160 (1280 x 720)
+  [shot] 23_home_1280x720_240 (1280 x 720)
+  [shot] 24_showroom_1280x720_240 (1280 x 720)
+  [shot] 25_home_800x480_120 (800 x 480)
+  [shot] 26_showroom_800x480_120 (800 x 480)
+  [shot] 27_home_1920x720_240 (1920 x 720)
+  [shot] 28_showroom_1920x720_240 (1920 x 720)
+  [shot] 29_home_1280x800_160 (1280 x 800)
+  [shot] 30_showroom_1280x800_160 (1280 x 800)
+  [shot] 31_home_2000x1200_320 (2000 x 1200)
+  [shot] 32_showroom_2000x1200_320 (2000 x 1200)
+  [shot] 33_home_768x1024_160 (768 x 1024)
+  [shot] 34_showroom_768x1024_160 (768 x 1024)
+
+== 5. it must always come back
+  stock launcher: com.google.android.apps.nexuslauncher/.NexusLauncherActivity
+  after opening the stock launcher, top: e469a43 u0 com.el7ajb.carlauncher/.MainActivity t10
+  [shot] 35_after_stock_launcher (1024 x 600)
+  settings app then HOME, top: d9b3538 u0 com.el7ajb.carlauncher/.MainActivity t7
+  after screen off/on, top: e469a43 u0 com.el7ajb.carlauncher/.MainActivity t10
+  [shot] 36_after_screen_on (1024 x 600)
+  after the app was killed, top: e469a43 u0 com.el7ajb.carlauncher/.MainActivity t10
+  after reboot (40s), top: 8bb64f1 u0 com.el7ajb.carlauncher/.MainActivity t12
+  [shot] 37_after_reboot (1024 x 600)
+
+== 6. languages (changed in Settings like a user would)
+  tap 'العربية' at 753 403
+  [shot] 38_settings_ar (1024 x 600)
+  [shot] 39_picker_ar (1024 x 600)
+  [shot] 40_home_ar (1024 x 600)
+  [shot] 41_showroom_ar (1024 x 600)
+  tap 'עברית' at 186 403
+  [shot] 42_settings_he (1024 x 600)
+  [shot] 43_picker_he (1024 x 600)
+  [shot] 44_home_he (1024 x 600)
+  [shot] 45_showroom_he (1024 x 600)
+  tap 'English' at 90 403
+  [shot] 46_settings_en (1024 x 600)
+  [shot] 47_picker_en (1024 x 600)
+  [shot] 48_home_en (1024 x 600)
+
+== 7. crashes
+  no crashes
+  no ANRs
+  error lines mentioning the app: 0
