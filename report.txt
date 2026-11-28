@@ -1,0 +1,8 @@
+Drive 3.0.29  API 24  (quick)
+device date: Sat Nov 28 11:42:31 UTC 2026
+  [shot] q1_first_run
+  car folder: superb-y96yn  after 3s, frames: 216
+  [shot] q2_after_download
+  [shot] q3_home
+  [shot] q4_showroom
+  no crashes

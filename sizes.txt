@@ -1,0 +1,4 @@
+q1_first_run 1024 600
+q2_after_download 1024 600
+q3_home 1024 600
+q4_showroom 1024 600
