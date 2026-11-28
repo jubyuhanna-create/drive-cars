@@ -8,7 +8,7 @@
 | السيارة | أبيض | أسود | رمادي جرافيت | فضي | أحمر | أزرق | كحلي |
 |---|---|---|---|---|---|---|---|
 | Skoda Superb 2020 | `Y96YN` | `ZQJC6` | `YLBLW` | `FZPDQ` | `2W5NP` | `79M4Y` | … |
-| Suzuki Swift 2008 | … | … | … | … | … | … | `HT7ZW` |
+| Suzuki Swift 2008 | `W7ZGB` | `XEQDW` | `M8BTA` | `5MQNM` | `TMYJT` | … | `HT7ZW` |
 <!-- /codes -->
 
 Public files for the **Drive** car launcher. The app only reads from here, it never writes and holds no token.

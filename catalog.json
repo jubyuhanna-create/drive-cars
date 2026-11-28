@@ -68,6 +68,61 @@
    "size": 6154209
   },
   {
+   "code": "W7ZGB",
+   "car": "swift",
+   "brand": "SUZUKI",
+   "model": "SWIFT",
+   "year": "2008",
+   "color": "white",
+   "colorName": "أبيض",
+   "hex": "#e6e8eb",
+   "size": 7431751
+  },
+  {
+   "code": "XEQDW",
+   "car": "swift",
+   "brand": "SUZUKI",
+   "model": "SWIFT",
+   "year": "2008",
+   "color": "black",
+   "colorName": "أسود",
+   "hex": "#0e0f11",
+   "size": 6830473
+  },
+  {
+   "code": "M8BTA",
+   "car": "swift",
+   "brand": "SUZUKI",
+   "model": "SWIFT",
+   "year": "2008",
+   "color": "graphite",
+   "colorName": "رمادي جرافيت",
+   "hex": "#3b4047",
+   "size": 7087275
+  },
+  {
+   "code": "5MQNM",
+   "car": "swift",
+   "brand": "SUZUKI",
+   "model": "SWIFT",
+   "year": "2008",
+   "color": "silver",
+   "colorName": "فضي",
+   "hex": "#a9aeb5",
+   "size": 7601746
+  },
+  {
+   "code": "TMYJT",
+   "car": "swift",
+   "brand": "SUZUKI",
+   "model": "SWIFT",
+   "year": "2008",
+   "color": "red",
+   "colorName": "أحمر",
+   "hex": "#6e0e13",
+   "size": 7633931
+  },
+  {
    "code": "HT7ZW",
    "car": "swift",
    "brand": "SUZUKI",
